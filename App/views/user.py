@@ -17,6 +17,10 @@ def client_app():
     users = [user.toDict() for user in users]
     return jsonify(users)
 
+@user_views.route('/api/hello')
+def hello():
+    return jsonify({'message': 'hello'})
+
 @user_views.route('/static/users')
 def static_user_page():
   return send_from_directory('static', 'static-user.html')

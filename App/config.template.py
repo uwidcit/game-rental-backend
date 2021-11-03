@@ -1,0 +1,11 @@
+DBHOST = "mydb.com"
+DBNAME = "MYDB"
+DBUSER = "USER"
+DBSCHEME = "mysql+pymysql://"
+DBPASSWORD = "PASSWORD"
+DBURI = "mysql+pymysql://USER:PASSWORD@mydb.com:3306/MYDB"
+SECRET_KEY = "SECRET"
+DBPORT = "3306"
+JWTDELTADAYS = 14
+ENV = 'development'
+SQLITEDB = True

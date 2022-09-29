@@ -21,6 +21,14 @@ def client_app():
     users = get_all_users_json()
     return jsonify(users)
 
+@user_views.route('/api/signup', methods=['POST'])
+def signup():
+    data = request.json
+    result = create_user(username=data['username'], password=data['password'])
+    if result:
+        return jsonify({"message": "User created"}), 201
+    return jsonify({"message": "Server error"}), 500
+
 @user_views.route('/static/users')
 def static_user_page():
   return send_from_directory('static', 'static-user.html')

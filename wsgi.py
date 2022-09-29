@@ -4,12 +4,31 @@ from flask.cli import with_appcontext, AppGroup
 
 from App.database import create_db, get_migrate
 from App.main import create_app
-from App.controllers import ( create_user, get_all_users_json, get_all_users )
+from App.controllers import ( 
+    create_user, 
+    get_all_users_json, 
+    get_all_users,
+    get_available_listings, 
+    get_all_games, 
+    create_game,
+    delist_game,
+    get_all_listings, 
+    get_user_listings, 
+    list_game,
+    create_rental,
+    get_outstanding_rentals,
+    return_rental,
+    get_outstanding_user_rentals 
+)
 
 # This commands file allow you to create convenient CLI commands for testing controllers
 
 app = create_app()
 migrate = get_migrate(app)
+
+'''
+Generic Commands
+'''
 
 # This command creates and initializes the database
 @app.cli.command("init", help="Creates and initializes the database")
@@ -45,17 +64,103 @@ def list_user_command(format):
     else:
         print(get_all_users_json())
 
+
+@user_cli.command("games", help="Shows the game listings of a user")
+def list_user__games_command():
+    print(get_all_users())
+    userId = input('Enter a userId: ')
+    print(get_user_listings(userId))
+
+
 app.cli.add_command(user_cli) # add the group to the cli
 
+'''
+Game Commands
+'''
+
+game_cli = AppGroup('game', help='Game object commands') 
+
+@game_cli.command("list", help="Lists the games in the database")
+def get_games():
+    print(get_all_games())
+
+@game_cli.command("create", help="Creates a game")
+@click.argument("title") #can be customized to accept genre, platform etc
+def make_game(title):
+    create_game(title)
+    print('Game Created')
+
+app.cli.add_command(game_cli)
+
 
 '''
-Generic Commands
+Listing Commands
 '''
 
-@app.cli.command("init")
-def initialize():
-    create_db(app)
-    print('database intialized')
+list_cli = AppGroup('listing', help='Game Listing commands') 
+
+@list_cli.command("list", help="Lists the available listings in the database")
+def get_listings_command():
+    print(get_available_listings())
+
+@list_cli.command("create", help="Lets a user list a game for rental")
+def list_game_command():
+    print(get_all_users())
+    userId = input('Enter a userId: ')
+    print(get_all_games())
+    gameId = input('Enter a gameId: ')
+    res = list_game(userId, gameId)
+    if res:
+        print('Game added to user!')
+    else :
+        print("error add game to user")
+
+@list_cli.command("remove", help="Delists a game")
+def delist_game_command():
+    print(get_all_users())
+    userId = input('Enter a userId: ')
+    print(get_available_listings())
+    listingId = input('Enter a listingId: ')
+    res = delist_game(listingId, userId)
+    if res:
+        print('Game un listed')
+    else :
+        print("Error removing listing bad ID or unauthorized")
+
+app.cli.add_command(list_cli)
+
+'''
+Rental Commands
+'''
+
+rental_cli = AppGroup('rental', help='Game Rental commands')
+
+@rental_cli.command("list", help="Lists outstanding rentals")
+def view_rentals_command():
+    print(get_outstanding_rentals())
+
+@rental_cli.command("create", help="Lets a user rent a game")
+def rent_game_command():
+    print(get_all_users())
+    userId = input('Enter user Id: ')
+    print(get_all_listings())
+    listingId = input("Enter a listing Id: ")
+    create_rental(userId, listingId)
+    print("Rental created!")
+
+@rental_cli.command("return", help="Lets a user return a game")
+def return_game_command():
+    print(get_all_users())
+    userId = input('Enter user Id: ')
+    print(get_outstanding_user_rentals(userId))
+    rentalId = input("Enter a rental Id: ")
+    res = return_rental(userId, rentalId)
+    if res :
+        print("rental returned!")
+    else:
+        print("Error, bad id or unauthorized")
+
+app.cli.add_command(rental_cli)
 
 '''
 Test Commands

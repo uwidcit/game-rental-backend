@@ -9,7 +9,7 @@ def get_user_listings_by_status(userId, status):
     return f'{userId} user not found'
 
 def get_available_listings():
-    return Listing.query.filter_by(status='available')
+    return Listing.query.filter_by(status='available').all()
 
 # get all listings of the user for any status
 def get_user_listings(userId):
@@ -27,14 +27,13 @@ def list_game(userId, gameId, condition="good", price=10.00):
     if user and game:
         listing = Listing.query.filter_by(userId=userId, gameId=gameId).first()     
         
-        if listing == None:
-            listing.status = 'available'
+        if listing != None:
+            return False   
         else:
             listing = Listing(userId, gameId, condition, price)
-        db.session.add(listing)
-        db.session.commit()
+            db.session.add(listing)
+            db.session.commit()  
         return True
-    return False
 
 def delist_game(listingId, userId):
     listing = Listing.query.filter_by(listingId=listingId, userId=userId).first()

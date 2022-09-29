@@ -4,7 +4,9 @@ from flask.cli import with_appcontext, AppGroup
 
 from App.database import create_db, get_migrate
 from App.main import create_app
-from App.controllers import ( create_user, get_all_users_json, get_all_users )
+from App.controllers import ( 
+    create_user, get_all_users_json, get_all_users, create_game, get_all_games
+    )
 
 # This commands file allow you to create convenient CLI commands for testing controllers
 
@@ -57,6 +59,29 @@ def initialize():
     create_db(app)
     print('database intialized')
 
+'''
+Game Commands
+'''
+
+game_cli = AppGroup('game', help='Game object commands') 
+
+# Then define the command and any parameters and annotate it with the group (@)
+@game_cli.command("create", help="Creates a game")
+@click.argument("title", default="frogger")
+@click.argument("rating", default="teens")
+@click.argument("platform", default="NSW")
+@click.argument("boxart", default="https://image.com/pic.png")
+@click.argument("genre", default="platform")
+def create_game_command(title, rating, platform, boxart, genre):
+    create_game(title, rating, platform, boxart, genre)
+    print(f'{title} created!')
+
+@game_cli.command("list", help="Lists games in the database")
+def list_game_command():
+    print(get_all_games())
+
+
+app.cli.add_command(game_cli)
 '''
 Test Commands
 '''

@@ -9,3 +9,8 @@ def create_game(title, rating='Teen', platform='ps5', boxart='https://placecage.
 def get_all_games():
     return Game.query.all()
 
+def get_all_games_json():
+    games = Game.query.all()
+    if not games:
+        return []
+    return [game.toJSON() for game in games]

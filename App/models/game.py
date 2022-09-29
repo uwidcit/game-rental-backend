@@ -13,7 +13,7 @@ class Game(db.Model):
         return f'<Game {self.gameId} - {self.title}>' 
 
     def toJSON(self):
-        return{
+        return {
             'id': self.gameId,
             'title': self.title,
             'rating':self.rating,

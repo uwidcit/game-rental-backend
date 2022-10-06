@@ -21,7 +21,7 @@ def client_app():
     users = get_all_users_json()
     return jsonify(users)
 
-@user_views.route('/api/signup', methods=['POST'])
+@user_views.route('/api/users', methods=['POST'])
 def signup():
     data = request.json
     result = create_user(username=data['username'], password=data['password'])

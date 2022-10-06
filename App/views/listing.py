@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory
-from flask_jwt import jwt_required
+from flask_jwt import jwt_required, current_identity
 
 from App.controllers import (
     get_avaiable_listings_json,
@@ -18,7 +18,7 @@ def get_listings_action():
 @jwt_required()
 def create_listing_action():
     data = request.json
-    res = list_game(current_identiy.id, data["gameId"], data['condition'], data['price'])
+    res = list_game(current_identity.id, data["gameId"], data['condition'], data['price'])
     if res:
         return jsonify({"message": "listing created"})
     return jsonify({"message": "listing not created"})

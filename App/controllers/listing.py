@@ -8,14 +8,18 @@ def get_user_listings_by_status(userId, status):
         return Listing.query.filter_by(userId=userId, status=status)
     return f'{userId} user not found'
 
+# filter vs filter_by https://stackoverflow.com/questions/8561470/sqlalchemy-filtering-by-relationship-attribute
 def get_available_listings(platform):
     if platform :
-      return Listing.query.filter_by(platform=platform, status='available').all()   
+      return Listing.query.filter(Game.platform==platform, Listing.status=="available").all()
     return Listing.query.filter_by(status='available').all()
 
 def get_avaiable_listings_json(platform):
     listings = get_available_listings(platform)
-    json = [ listing.toJSON_with_game() for listing in listings ]
+    print(listings)
+    if listings:
+        return [ listing.toJSON_with_game() for listing in listings ]
+    return []
 
 # get all listings of the user for any status
 def get_user_listings(userId):

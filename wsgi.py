@@ -101,7 +101,7 @@ list_cli = AppGroup('listing', help='Game Listing commands')
 
 @list_cli.command("list", help="Lists the available listings in the database")
 def get_listings_command():
-    print(get_available_listings())
+    print(get_available_listings(None))
 
 @list_cli.command("create", help="Lets a user list a game for rental")
 def list_game_command():

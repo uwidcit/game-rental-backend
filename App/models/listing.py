@@ -23,6 +23,7 @@ class Listing(db.Model):
 
     def toJSON_with_game(self):
         return{
+            "listingId": self.listingId,
             'title': self.game.title,
             'condition': self.condition,
             'price': self.price,

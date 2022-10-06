@@ -1,6 +1,8 @@
 from App.database import db
 from datetime import datetime
 
+DEFAULT_RENTAL_PEROID = 14
+
 class Rental(db.Model):
     rentalId = db.Column(db.Integer, primary_key=True)
     userId = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -15,6 +17,23 @@ class Rental(db.Model):
     def __repr__(self):
         return f'<rental {self.rentalId} >'
     
+    def calculate_fees(self):
+        days_rented = (self.return_date - self.rental_date).days
+        days_late = days_rented - DEFAULT_RENTAL_PEROID
+        if days_late > 0:
+            return self.listing.price + ( 0.10 * self.listing.price * days_late )
+        return self.listing.price
+
+    def return_rental(self):
+         self.rental_date = datetime.utcnow
+         fees = self.calculate_fees()
+         rental.listing.status = 'available'
+         db.session.add(self)
+         db.session.add(self.listing)
+         db.session.commit()
+         return fees
+         
+
     def toJSON(self):
         return{
             'rentalId': self.rentalId,

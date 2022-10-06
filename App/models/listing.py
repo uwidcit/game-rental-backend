@@ -21,12 +21,22 @@ class Listing(db.Model):
     def __repr__(self):
         return f'<listing {self.listingId} - {self.game.title} - listed by {self.user.username} for ${self.price}>'
 
-    def toJSON(self):
+    def toJSON_with_game(self):
         return{
             'title': self.game.title,
             'condition': self.condition,
             'price': self.price,
             'created': self.created.strftime("%Y/%m/%d, %H:%M:%S"),
             'status': self.status,
+            'game': self.game.toJSON(),
+        }
+
+    def toJSON(self):
+        return{
+            'title': self.game.title,
+            'condition': self.condition,
+            'price': self.price,
+            'created': self.created.strftime("%Y/%m/%d, %H:%M:%S"),
+            'status': self.status
         }
 

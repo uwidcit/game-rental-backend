@@ -5,14 +5,16 @@ from App.database import db
 def get_user_listings_by_status(userId, status):
     user = User.query.get(userId)
     if userId :
-        return Listing.query.filter_by(userId =userId, status=status)
+        return Listing.query.filter_by(userId=userId, status=status)
     return f'{userId} user not found'
 
-def get_available_listings():
+def get_available_listings(platform):
+    if platform :
+      return Listing.query.filter_by(platform=platform, status='available').all()   
     return Listing.query.filter_by(status='available').all()
 
-def get_avaiable_listings_json():
-    listings = get_available_listings()
+def get_avaiable_listings_json(platform):
+    listings = get_available_listings(platform)
     json = [ listing.toJSON_with_game() for listing in listings ]
 
 # get all listings of the user for any status

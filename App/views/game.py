@@ -8,7 +8,15 @@ from App.controllers import (
 
 game_views = Blueprint('game_views', __name__, template_folder='../templates')
 
-@game_views.route('/api/games')
+@game_views.route('/games', methods=['GET'])
 def get_games_action():
     games = get_all_games_json()
     return jsonify(games)
+
+
+@game_views.route('/games', methods=['POST'])
+@jwt_required()
+def create_game_action():
+    data = request.json
+    game = create_game(data['title'], data['rating'], data['platform'], data['boxart'], data['genre'])
+    return jsonify({'message':f'Game {game.id} - {game.title} created'})

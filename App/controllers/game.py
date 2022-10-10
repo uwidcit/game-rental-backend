@@ -5,6 +5,7 @@ def create_game(title, rating='Teen', platform='ps5', boxart='https://placecage.
     newgame = Game(title=title, rating=rating, platform=platform, boxart=boxart, genre=genre)
     db.session.add(newgame)
     db.session.commit()
+    return newgame
 
 def get_all_games():
     return Game.query.all()

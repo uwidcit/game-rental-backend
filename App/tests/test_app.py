@@ -61,7 +61,7 @@ def test_authenticate():
     user = create_user("bob", "bobpass")
     assert authenticate("bob", "bobpass")
 
-def test_create_user(self):
+def test_create_user():
     user = create_user("rick", "bobpass")
     assert user.username == "rick"
 

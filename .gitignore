@@ -1,4 +1,5 @@
 App/temp-database.db
+App/test.db
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

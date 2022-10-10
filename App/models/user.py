@@ -15,8 +15,6 @@ class User(db.Model):
     def __repr__(self):
         return f'<User {self.id} {self.username}>'
 
-
-
     def set_password(self, password):
         """Create hashed password."""
         self.password = generate_password_hash(password, method='sha256')

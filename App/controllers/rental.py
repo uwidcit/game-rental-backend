@@ -11,7 +11,7 @@ def create_rental(userId, listingId):
         db.session.add(rental)
         db.session.add(listing)
         db.session.commit()
-        return True
+        return rental
     return False
 
 def get_rentals_json():

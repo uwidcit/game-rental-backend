@@ -1,5 +1,5 @@
 import os
-from .custom_config import *
+import importlib
 from datetime import timedelta
 
 # must be updated to inlude addtional secrets/ api keys & use a gitignored custom-config file instad
@@ -7,6 +7,7 @@ def load_config():
     config = {'ENV': os.environ.get('ENV', 'DEVELOPMENT')}
     delta = 7
     if config['ENV'] == "DEVELOPMENT":
+        from .custom_config import JWT_EXPIRATION_DELTA, SQLALCHEMY_DATABASE_URI, SECRET_KEY, RAWG_TOKEN
         delta = JWT_EXPIRATION_DELTA
         config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
         config['SECRET_KEY'] = SECRET_KEY

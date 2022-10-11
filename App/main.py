@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
 from datetime import timedelta
 
-from App.config import load_config
+from App.config import config
 from App.database import create_db
 
 from App.controllers import (
@@ -15,8 +15,6 @@ from App.controllers import (
 )
 
 from App.views import app_views
-
-config = load_config()
 
 def add_views(app):
     for view in app_views:

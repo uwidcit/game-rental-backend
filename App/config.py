@@ -15,7 +15,7 @@ def load_config():
     else:
         config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
         config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-        config['RAWG_KEY'] = os.environ.get('RAWG_TOKEN')
+        config['RAWG_TOKEN'] = os.environ.get('RAWG_TOKEN')
         config['DEBUG'] = config['ENV'].upper() != 'PRODUCTION'
         delta = int(os.environ.get('JWT_EXPIRATION_DELTA', 7))
     config['JWT_EXPIRATION_DELTA'] = timedelta(days=int(delta))

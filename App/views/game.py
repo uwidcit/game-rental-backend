@@ -12,7 +12,7 @@ game_views = Blueprint('game_views', __name__, template_folder='../templates')
 
 @game_views.route('/games', methods=['GET'])
 def get_games_action():
-    return fetch_api_games()
+    return jsonify(fetch_api_games())
 
 @game_views.route('/games/<rawgId>', methods=['GET'])
 def get_game_action(rawgId):

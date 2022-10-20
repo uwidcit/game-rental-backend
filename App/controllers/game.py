@@ -33,15 +33,34 @@ def fetch_api_game(rawgId):
     response = requests.request("GET", url)
     return json.loads(response.text)
 
-def fetch_api_games():
-    url = f'https://api.rawg.io/api/games?key={config["RAWG_TOKEN"]}'
+def search_api_game(query):
+    url = f'https://api.rawg.io/api/games?key={config["RAWG_TOKEN"]}&search={query}'
     response = requests.request("GET", url)
+    return json.loads(response.text)
+
+def fetch_api_games(page=1, ordering='-release'):
+    url = f'https://api.rawg.io/api/games?key={config["RAWG_TOKEN"]}&ordering={ordering}&page={page}'
+    response = requests.request("GET", url)
+    print(url)
     json_response = json.loads(response.text)
     return json_response['results']
 
-def populate_games():
-    Game.query.delete()
+def cache_api_games(page=1):
+    if page == 1:
+        res = Game.query.delete()
+        db.session.commit()
+    games_json = fetch_api_games(page)
+    games = []
+    for game in games_json:
+        rating = "N/S"
+        if game['esrb_rating']:
+            rating = game['esrb_rating']['name']
+        for platform in game['platforms']:
+            new_game = Game(rawgId=game['id'], title=game['name'], rating=rating, platform=platform['platform']['name'], boxart=game['background_image'], genre=game['genres'][0]['name'])
+            games.append(new_game)
+            db.session.add(new_game)
     db.session.commit()
+    return games
 
 def get_all_games_json():
     games = Game.query.all()

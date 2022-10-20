@@ -18,7 +18,8 @@ from App.controllers import (
     create_rental,
     get_outstanding_rentals,
     return_rental,
-    get_outstanding_user_rentals 
+    get_outstanding_user_rentals,
+    cache_api_games
 )
 
 # This commands file allow you to create convenient CLI commands for testing controllers
@@ -182,6 +183,13 @@ def create_game_command(title, rating, platform, boxart, genre):
 @game_cli.command("list", help="Lists games in the database")
 def list_game_command():
     print(get_all_games())
+
+@game_cli.command("load", help="Loads games from the api into the database")
+@click.argument("page", default=1)
+def load_game_command(page):
+    games = cache_api_games(page)
+    print(f"{len(games)} games loaded from API")
+    
 
 
 app.cli.add_command(game_cli)

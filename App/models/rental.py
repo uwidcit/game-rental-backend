@@ -17,17 +17,15 @@ class Rental(db.Model):
     def __repr__(self):
         return f'<rental {self.rentalId} owner: {self.listing.user.username} renter: {self.user.username} game: {self.listing.game.title}>'
     
-    def calculate_fees(self):
+    def calculate_late_fees(self):
         print(self.return_date)
         days_rented = self.return_date - self.rental_date
         days_late = days_rented.days - DEFAULT_RENTAL_PEROID
-        if days_late > 0:
-            return self.listing.price + ( 0.10 * self.listing.price * days_late )
-        return self.listing.price
+        return  0.10 * self.listing.price * days_late 
 
     def return_rental(self):
          self.return_date = datetime.utcnow()
-         fees = self.calculate_fees()
+         fees = self.calculate_late_fees()
          self.listing.status = 'available'
          db.session.add(self)
          db.session.add(self.listing)

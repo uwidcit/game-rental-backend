@@ -1,6 +1,8 @@
 from App.models import User, Game, Listing
 from App.database import db
 
+def get_available_listing(listingId):
+    return Listing.query.filter_by(listingId=listingId, status='available').first()
 
 def get_user_listings_by_status(userId, status):
     user = User.query.get(userId)

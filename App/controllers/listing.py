@@ -1,12 +1,12 @@
-from App.models import User, Game, Listing
+from App.models import Game, Listing, Customer, Staff
 from App.database import db
 
 def get_available_listing(listingId):
     return Listing.query.filter_by(listingId=listingId, status='available').first()
 
 def get_user_listings_by_status(userId, status):
-    user = User.query.get(userId)
-    if userId :
+    owner = Customer.query.get(userId)
+    if owner :
         return Listing.query.filter_by(userId=userId, status=status)
     return f'{userId} user not found'
 
@@ -25,38 +25,29 @@ def get_avaiable_listings_json(platform):
 
 # get all listings of the user for any status
 def get_user_listings(userId):
-    user = User.query.get(userId)
-    if userId :
-        return user.listings
+    owner = Customer.query.get(userId)
+    if owner :
+        return owner.listings
     return f'{userId} user not found'
 
 # creates a listing for a user
-def list_game(userId, gameId, condition="good", price=10.00):
-
-    user = User.query.get(userId)
+def list_game(staffId, userId, gameId, condition="good", price=10.00):
+    owner = Customer.query.get(userId)
     game = Game.query.get(gameId)
-
-    if user and game:
-        # check if user already has a listing for this game
-        listing = Listing.query.filter_by(userId=userId, gameId=gameId).first()     
-        
-        #if user does not already have this game listed
-        if listing == None:
-            listing = Listing(userId, gameId, condition, price)
-            db.session.add(listing)
-            db.session.commit() 
-            return True
-    # operation failed, ids might be invalid or listing already exists         
+    staff = Staff.query.get(staffId)
+    if owner and game and staff:
+        return staff.list_game(owner, game, condition, price)     
     return False
 
-def delist_game(listingId, userId):
-    listing = Listing.query.filter_by(listingId=listingId, userId=userId).first()
-    if listing :
-        listing.status = 'delisted'
-        db.session.add(listing)
-        db.session.commit()
-        return True
+def delist_game(staffId, listingId):
+    staff = Staff.query.get(staffId)
+    listing = Listing.query.get(listingId)
+    if listing and staff :
+        return staff.delist_game(listing)
     return False
+
+def get_listing(id):
+    return Listing.query.get(id)
 
 def get_all_listings():
     return Listing.query.all()

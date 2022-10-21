@@ -1,6 +1,7 @@
 from App.models import Rental, Listing, User
 from .payment import create_rental_payment
 from App.database import db
+
 from datetime import datetime
 
 def create_rental(userId, listingId):
@@ -12,6 +13,14 @@ def create_rental(userId, listingId):
         db.session.add(listing)
         db.session.commit()
         return rental
+    return False
+
+def return_rental(rentalId):
+    rental = Rental.query.get(rentalId)
+    if rental:
+        fees = rental.return_rental()
+        create_rental_payment(rentalId, rental.userId, fees)
+        return fees
     return False
 
 def get_rentals_json():
@@ -27,12 +36,6 @@ def get_outstanding_user_rentals(userId):
 def get_outstanding_rentals():
     return Rental.query.filter_by(return_date=None).all()
 
-
-def return_rental(rentalId):
-    rental = Rental.query.get(rentalId)
-    if rental:
-        fees = rental.return_rental()
-        create_rental_payment(rentalId, rental.userId, fees)
-        return fees
-    return False
+def get_rental(rentalId):
+    return Rental.query.get(rentalId)
 

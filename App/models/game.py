@@ -15,7 +15,7 @@ class Game(db.Model):
 
     def toJSON(self):
         return {
-            'id': self.gameId,
+            'gameId': self.gameId,
             'rawgId': self.rawgId,
             'title': self.title,
             'rating':self.rating,

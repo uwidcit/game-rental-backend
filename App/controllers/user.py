@@ -22,9 +22,12 @@ def create_staff(username, password):
 
 def create_customer(username, password):
     newuser = Customer(username=username, password=password)
-    db.session.add(newuser)
-    db.session.commit()
-    return newuser
+    try:
+        db.session.add(newuser)
+        db.session.commit()
+        return newuser
+    except:
+        return None
 
 def get_staff(id):
     return Staff.query.get(id)

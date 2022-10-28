@@ -27,7 +27,7 @@ def create_customer_action():
     result = create_customer(username=data['username'], password=data['password'])
     if result:
         return jsonify({"message": f"Customer created with id {result.id}"}), 201
-    return jsonify({"message": "Server error"}), 500
+    return jsonify({"error": f"Username {data['username']} already exists "}), 500
 
 @user_views.route('/staff', methods=['POST'])
 def create_staff_action():
@@ -35,7 +35,7 @@ def create_staff_action():
     result = create_staff(username=data['username'], password=data['password'])
     if result:
         return jsonify({"message": f"Staff created with id {result.id}"}), 201
-    return jsonify({"message": "Server error"}), 500
+    return jsonify({"error": f"Username {data['username']} already exists "}), 500
 
 @user_views.route('/identify', methods=['GET'])
 @jwt_required()

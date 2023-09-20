@@ -4,8 +4,8 @@ from App.database import db
 class User(db.Model):
     __abstract__ = True
     id = db.Column(db.Integer, primary_key=True)
-    username =  db.Column(db.String, nullable=False, unique=True)
-    user_type =  db.Column(db.String, nullable=False)
+    username =  db.Column(db.String(120), nullable=False, unique=True)
+    user_type =  db.Column(db.String(120), nullable=False)
     password = db.Column(db.String(120), nullable=False)
 
 

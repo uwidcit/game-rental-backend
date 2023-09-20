@@ -11,4 +11,4 @@ psycopg2-binary==2.9.3
 Flask-Migrate==3.1.0
 coverage==6.4.4
 requests==2.28.1
-mysql-connector-python==8.1.0
+mysql-connector-python==8.0.33

@@ -1,4 +1,5 @@
 import os
+import logging
 from flask import Flask
 from flask_login import LoginManager, current_user
 from flask_uploads import DOCUMENTS, IMAGES, TEXT, UploadSet, configure_uploads
@@ -34,6 +35,7 @@ def create_app(config_overrides={}):
     app.config['PREFERRED_URL_SCHEME'] = 'https'
     app.config['UPLOADED_PHOTOS_DEST'] = "App/uploads"
     photos = UploadSet('photos', TEXT + DOCUMENTS + IMAGES)
+    logging.basicConfig(level=logging.DEBUG)
     configure_uploads(app, photos)
     add_views(app)
     init_db(app)

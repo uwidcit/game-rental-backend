@@ -7,7 +7,7 @@ class Listing(db.Model):
     gameId = db.Column(db.Integer, db.ForeignKey('game.gameId'))
     condition = db.Column(db.String(30))
     price = db.Column(db.Float)
-    status = db.Column(db.String(30))# available, rented, delisted
+    status = db.Column(db.String(30))# available, rented, delisted, sold
     created = db.Column(db.DateTime, default=datetime.utcnow)
     rentals = db.relationship('Rental', backref=db.backref('listing', lazy='joined'))
 

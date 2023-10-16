@@ -9,6 +9,13 @@
 			"installTools": true,
 			"version": "3.9"
 		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"GitHub.copilot"
+			]
+		}
 	}
 
 	// Features to add to the dev container. More info: https://containers.dev/features.

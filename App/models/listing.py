@@ -19,7 +19,7 @@ class Listing(db.Model):
         self.status = 'available'
 
     def __repr__(self):
-        return f'<listing {self.listingId} for ${self.price}>'
+        return f'<listing {self.listingId} Owner {self.owner.username} Game: {self.game.title} for ${self.price} Status: {self.status}>'
 
     def toJSON_with_game(self):
         return{

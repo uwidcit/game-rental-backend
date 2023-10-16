@@ -18,7 +18,7 @@ class User(db.Model):
 
     def set_password(self, password):
         """Create hashed password."""
-        self.password = generate_password_hash(password, method='scrypt')
+        self.password = generate_password_hash(password)
     
     def check_password(self, password):
         """Check hashed password."""

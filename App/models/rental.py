@@ -11,15 +11,17 @@ class Rental(db.Model):
     return_date = db.Column(db.DateTime, default=None)
     payments = db.relationship('RentalPayment', backref=db.backref('rental', lazy='joined'))
 
-    def __init__(self, userId, listingId):
-        self.userId = userId
+    def __init__(self, renterId, listingId):
+        self.renterId = renterId
         self.listingId = listingId
     
     def __repr__(self):
-        return f'<rental {self.rentalId} owner: {self.listing.user.username} renter: {self.user.username} game: {self.listing.game.title}>'
+        return f'<rental {self.rentalId} owner: {self.listing.owner.username} renter: {self.renter.username} listingId: {self.listing.listingId} game: {self.listing.game.title}, returned: { self.return_date != None }>'
     
     def calculate_late_fees(self):
         days_rented = self.return_date - self.rental_date
+        if days_rented.days <= DEFAULT_RENTAL_PEROID:
+            return 0
         days_late = days_rented.days - DEFAULT_RENTAL_PEROID
         return  0.10 * self.listing.price * days_late 
 

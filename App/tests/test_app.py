@@ -7,6 +7,7 @@ from App.models import User, Staff
 from App.controllers import (
     create_staff,
     create_customer,
+    get_customer,
     get_rental,
     get_staff,
     create_game,
@@ -84,11 +85,30 @@ class UsersIntegrationTests(unittest.TestCase):
     def test_list_game(self):
         bob = get_staff(1)
         jane = create_customer("jane", "janepass")
-        ross = create_customer("ross", "rosspass")
+        
         game = create_game("frogger", 12324, "Teen", "NSW", "http://image.com", "adventure")
-        listing = bob.list_game(ross, game, 'good', 11.50)
-        get_listing(listing.listingId)
-        assert listing.ownerId == ross.id and listing.gameId == game.gameId
+        new_listing = bob.list_game(jane, game, "good", 5.00)
+        test_listing = get_listing(new_listing.listingId)
+        assert test_listing.ownerId == jane.id and test_listing.gameId == game.gameId
+    
+    def test_staff_confirm_rental(self):
+        listing = get_listing(1)
+        bob = get_staff(1)
+        ross = create_customer("ross", "rosspass")
+        new_rental = bob.confirm_rental(ross, listing)
+        test_rental = get_rental(new_rental.rentalId)
+        assert test_rental.renterId == ross.id and test_rental.listingId == listing.listingId
+    
+    # def test_staff_confirm_return(self):
+    #     rental = get_rental(1)
+    #     bob = get_staff(1)
+    #     bob.confirm_return(rental)
+    #     test_rental = get_rental(1)
+    #     assert test_rental.return_date != None
+        
+
+    
+
 
         
 

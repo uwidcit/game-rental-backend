@@ -6,9 +6,14 @@ from App.database import create_db, db
 from App.models import User, Staff
 from App.controllers import (
     create_staff,
+    create_customer,
+    get_rental,
     get_staff,
+    create_game,
+    list_game,
     get_all_users_json,
     authenticate,
+    get_listing,
     get_user_by_username,
     update_staff
 )
@@ -34,7 +39,6 @@ class UserUnitTests(unittest.TestCase):
     
     def test_hashed_password(self):
         password = "mypass"
-        # hashed = generate_password_hash(password, method='script')
         user = User("bob", password)
         assert user.password != password
 
@@ -75,4 +79,18 @@ class UsersIntegrationTests(unittest.TestCase):
         update_staff(1, "ronnie")
         user = get_staff(1)
         assert user.username == "ronnie"
+
+    # tests staff's ability to create rentals in system
+    def test_list_game(self):
+        bob = get_staff(1)
+        jane = create_customer("jane", "janepass")
+        ross = create_customer("ross", "rosspass")
+        game = create_game("frogger", 12324, "Teen", "NSW", "http://image.com", "adventure")
+        listing = bob.list_game(ross, game, 'good', 11.50)
+        get_listing(listing.listingId)
+        assert listing.ownerId == ross.id and listing.gameId == game.gameId
+
+        
+
+        
 

@@ -2,8 +2,6 @@ from App.models import Rental, Listing, User
 from .payment import create_rental_payment
 from App.database import db
 
-from datetime import datetime
-
 def create_rental(userId, listingId):
     listing = Listing.query.filter_by(listingId=listingId, status='available').first()
     if listing:

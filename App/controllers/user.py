@@ -8,6 +8,7 @@ def create_user(username, password):
         db.session.commit()
         return newuser
     except:
+        db.session.rollback()
         return None
     
 
@@ -18,6 +19,7 @@ def create_staff(username, password):
         db.session.commit()
         return newuser
     except:
+        db.session.rollback()
         return None
 
 def create_customer(username, password):
@@ -27,13 +29,27 @@ def create_customer(username, password):
         db.session.commit()
         return newuser
     except:
+        db.session.rollback()
         return None
 
 def get_staff(id):
     return Staff.query.get(id)
 
 def get_customer(id):
-    return Customer.query.get(id)
+    try:
+        customer = Customer.query.get(id)
+        if customer == None:
+            raise Exception(f"Customer not found for id {id}")
+        return customer
+    except Exception as e:
+        print(e)
+        return None
+
+def get_all_customers():
+    return Customer.query.all()
+
+def get_all_staff():
+    return Staff.query.all()
 
 def is_staff(id):
     return Staff.query.get(id) != None
@@ -41,8 +57,6 @@ def is_staff(id):
 def get_user_by_username(username):
     return User.query.filter_by(username=username).first()
 
-def get_user(id):
-    return User.query.get(id)
 
 def get_all_users():
     return User.query.all()
@@ -62,8 +76,8 @@ def get_all_users_json():
     
     return users
 
-def update_user(id, username):
-    user = get_user(id)
+def update_staff(id, username):
+    user = get_staff(id)
     if user:
         user.username = username
         db.session.add(user)

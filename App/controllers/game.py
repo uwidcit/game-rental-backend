@@ -11,7 +11,10 @@ def create_game(title, rawgId, rating='Teen', platform='ps5', boxart='https://pl
     db.session.commit()
     return newgame
 
-def get_game(rawgId):
+def get_game(id):
+    return Game.query.get(id)
+
+def get_api_game(rawgId):
     game = Game.query.filter_by(rawgId=rawgId).first()
     if game :
         return game

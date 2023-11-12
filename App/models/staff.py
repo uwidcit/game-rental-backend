@@ -37,8 +37,10 @@ class Staff(User):
     def confirm_rental(self, renter, listing):
         rental = Rental(renter.id, listing.listingId)
         payment = RentalPayment(rental)
-        listing.status = 'rented'
         try:
+            if listing.status != 'available':
+                raise Exception(f'listing {listing.listingId} is not available')
+            listing.status = 'rented'
             db.session.add(rental)
             db.session.add(payment)
             db.session.add(listing)
@@ -49,15 +51,17 @@ class Staff(User):
             return None
     
     def confirm_return(self, rental):
-        # fees = rental.return_rental()
-        # rental_payment = RentalPayment(rental)
-        listing = Listing.query.get(rental.listingId)
-        listing.status = 'available'
         try:
+            if rental.return_date != None:
+                raise Exception(f'rental {rental.rentalId} has already been returned')
+            fees = rental.return_rental()
+            rental_payment = RentalPayment(rental)
+            listing = Listing.query.get(rental.listingId)
+            listing.status = 'available'
             db.session.add(listing)
-            # db.session.add(rental_payment)
+            db.session.add(rental_payment)
             db.session.commit()
-            return 0
+            return fees
         except:
             return None
     

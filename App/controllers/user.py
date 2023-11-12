@@ -54,6 +54,9 @@ def get_all_staff():
 def is_staff(id):
     return Staff.query.get(id) != None
 
+def get_user(id):
+    return User.query.get(id)
+
 def get_user_by_username(username):
     return User.query.filter_by(username=username).first()
 

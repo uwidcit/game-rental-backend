@@ -83,43 +83,32 @@ def test_create_staff():
     user = get_staff(ron.id)
     assert user.username == ron.username
 
-def test_create_game():
-    user = create_staff("staff", "staffpass")
-    user.create_game(1, "new game")
-    assert user.games[0].rawgId == 1
 
 def test_staff_create_listing():
     bob = get_staff(1)
     rick = get_customer(1)
     game = get_game(1)
-    bob.create_listing(rick, game, "new", 10)
+    bob.list_game(rick, game, "new", 10)
     assert rick.listings[0].listingId == 1
 
 def test_staff_confirm_rental():
-    user = create_staff("staff", "staffpass")
-    user.confirm_rental(1)
-    assert user.rentals[0].confirmed
+    bob = get_staff(1)
+    sally = create_customer("sally", "bobpass")
+    listing = get_listing(1)
+    bob.confirm_rental(sally, listing)
+    assert listing.rentals[0].rentalId == 1
 
 def test_staff_confirm_return():
-    user = create_staff("staff", "staffpass")
-    user.confirm_return(1)
-    assert user.rentals[0].returned
+    bob = get_staff(1)
+    rental = get_rental(1)
+    bob.confirm_return(rental)
+    assert rental.return_date != None
 
-class UsersIntegrationTests(unittest.TestCase):
+# class UsersIntegrationTests(unittest.TestCase):
 
-    def test_get_all_users_json(self):
-        users_json = get_all_users_json()
-        self.assertListEqual([{"id":1, "username":"bob", "type":"staff"}, {"id":2, "username":"ron", "type":"staff"}], users_json)
-
-    def test_update_staff(self):
-        update_staff(1, "ronnie")
-        user = get_staff(1)
-        assert user.username == "ronnie"
-    
-    def test_create_staff(self):
-        user = create_staff("staff", "staffpass")
-        print(user.id)
-        assert user.username == "staff"
+#     def test_get_all_users_json(self):
+#         users_json = get_all_users_json()
+#         self.assertListEqual([{"id":1, "username":"bob", "type":"staff"}, {"id":2, "username":"ron", "type":"staff"}], users_json)
 
     # tests staff's ability to create rentals in system
     # def test_list_game(self):

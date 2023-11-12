@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory
-from flask_jwt import jwt_required, current_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 from App.controllers import (
@@ -7,7 +7,8 @@ from App.controllers import (
     create_staff, 
     get_all_users,
     get_all_users_json,
-    is_staff
+    is_staff,
+    get_user
 )
 
 user_views = Blueprint('user_views', __name__, template_folder='../templates')
@@ -16,7 +17,7 @@ user_views = Blueprint('user_views', __name__, template_folder='../templates')
 @user_views.route('/users', methods=['GET'])
 @jwt_required()
 def client_app():
-    if is_staff(current_identity.id):
+    if is_staff(get_jwt_identity()):
         users = get_all_users_json()
         return jsonify(users)
     return jsonify({"error": "User not authorized to perform this action"}), 403
@@ -40,4 +41,5 @@ def create_staff_action():
 @user_views.route('/identify', methods=['GET'])
 @jwt_required()
 def identify_user_action():
-    return jsonify({'message': f"username: {current_identity.username}, id : {current_identity.id}, type: {current_identity.user_type}"})
+    current_identity = get_user(get_jwt_identity())
+    return jsonify({'message': f"username: {current_identity.username}, id : {get_jwt_identity()}, type: {current_identity.user_type}"})

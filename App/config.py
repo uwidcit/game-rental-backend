@@ -7,7 +7,7 @@ def load_config():
     config = {'ENV': os.environ.get('ENV', 'DEVELOPMENT')}
     delta = 7
     if config['ENV'] == "DEVELOPMENT":
-        from .custom_config import JWT_EXPIRATION_DELTA, SQLALCHEMY_DATABASE_URI, SECRET_KEY, RAWG_TOKEN
+        from .default_config import JWT_EXPIRATION_DELTA, SQLALCHEMY_DATABASE_URI, SECRET_KEY, RAWG_TOKEN
         delta = JWT_EXPIRATION_DELTA
         config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
         config['SECRET_KEY'] = SECRET_KEY

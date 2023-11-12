@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory
-from flask_jwt import jwt_required, current_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from App.controllers import (
     get_avaiable_listings_json,
@@ -23,7 +23,7 @@ def get_listings_action():
 @jwt_required()
 def create_listing_action():
     data = request.json
-    staff = get_staff(current_identity.id)
+    staff = get_staff(get_jwt_identity())
     game = get_game(data["gameId"])
     owner = get_customer(data['owner'])
     if staff and owner and game:
@@ -37,7 +37,7 @@ def create_listing_action():
 @listing_views.route('/listings/<listingId>', methods=['PUT'])
 @jwt_required()
 def delist_action(listingId):
-    staff = get_staff(current_identity.id)
+    staff = get_staff(get_jwt_identity())
     if staff:
         listing = get_listing(listingId)
         if listing:

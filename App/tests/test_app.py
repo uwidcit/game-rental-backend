@@ -5,12 +5,16 @@ from App.main import create_app
 from App.database import create_db
 from App.models import User
 from App.controllers import (
-    create_user,
+    create_customer,
+    create_game,
+    get_user,
+    get_customer,
+    create_staff,
     get_all_users_json,
     authenticate,
-    get_user,
-    get_user_by_username,
-    update_user
+    get_staff,
+    update_user,
+    get_game
 )
 
 from wsgi import app
@@ -58,12 +62,38 @@ def empty_db():
 
 
 def test_authenticate():
-    user = create_user("bob", "bobpass")
+    bob = create_staff("bob", "bobpass")
     assert authenticate("bob", "bobpass")
 
+def test_create_game():
+    game = create_game("frogger", 1)
+    assert game.title == "frogger" and game.rawgId == 1
+
 def test_create_user():
-    user = create_user("rick", "bobpass")
+    user = create_customer("rick", "bobpass")
     assert user.username == "rick"
+
+def test_create_game():
+    user = create_staff("staff", "staffpass")
+    user.create_game(1, "new game")
+    assert user.games[0].rawgId == 1
+
+def test_staff_create_listing():
+    bob = get_staff(1)
+    rick = get_customer(1)
+    game = get_game(1)
+    bob.create_listing(rick, game, "new", 10)
+    assert rick.listings[0].listingId == 1
+
+def test_staff_confirm_rental():
+    user = create_staff("staff", "staffpass")
+    user.confirm_rental(1)
+    assert user.rentals[0].confirmed
+
+def test_staff_confirm_return():
+    user = create_staff("staff", "staffpass")
+    user.confirm_return(1)
+    assert user.rentals[0].returned
 
 class UsersIntegrationTests(unittest.TestCase):
 
@@ -75,4 +105,8 @@ class UsersIntegrationTests(unittest.TestCase):
         update_user(1, "ronnie")
         user = get_user(1)
         assert user.username == "ronnie"
-
+    
+    def test_create_staff(self):
+        user = create_staff("staff", "staffpass")
+        print(user.id)
+        assert user.username == "staff"

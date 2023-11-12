@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory
-from flask_jwt import jwt_required, current_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from App.controllers import (
     get_rentals_json,
@@ -16,14 +16,14 @@ rental_views = Blueprint('rental_views', __name__, template_folder='../templates
 @rental_views.route('/rentals', methods=['GET'])
 @jwt_required()
 def get_rentals_action():
-    if is_staff(current_identity.id):
+    if is_staff(get_jwt_identity()):
         return jsonify(get_rentals_json())
     return jsonify({"error": "User not authorized to perform this action"}), 403
 
 @rental_views.route('/rentals', methods=["POST"])
 @jwt_required()
 def rent_game_action():
-    staff = get_staff(current_identity.id)
+    staff = get_staff(get_jwt_identity())
     if staff:
         renter = get_customer(request.json['renter'])
         listing = get_available_listing(request.json['listingId'])
@@ -38,7 +38,7 @@ def rent_game_action():
 @rental_views.route('/rentals/<rentalId>', methods=["PUT"])
 @jwt_required()
 def return_rental_action(rentalId):
-    staff = get_staff(current_identity.id)
+    staff = get_staff(get_jwt_identity())
     if staff:
         rental = get_rental(rentalId)
         if rental:

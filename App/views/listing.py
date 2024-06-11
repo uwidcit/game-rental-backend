@@ -32,7 +32,7 @@ def create_listing_action():
         if listing:
             return jsonify({"message": f"listing created with id: {listing.listingId} by user: {listing.ownerId }"})
         return jsonify({"error": "listing not created bad id"}), 400
-    return jsonify({"error": "User not authorized to perform this action"}), 403
+    return jsonify({"error": "User not authorized to perform this action or bad customer id"}), 403
 
 @listing_views.route('/listings/<listingId>', methods=['PUT'])
 @jwt_required()

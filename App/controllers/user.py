@@ -64,6 +64,10 @@ def get_user_by_username(username):
 def get_all_users():
     return User.query.all()
 
+def get_all_customers_json():
+    customers = Customer.query.all()
+    return [customer.toJSON() for customer in customers]
+
 def get_all_users_json():
     staff = Staff.query.all()
     customers = Customer.query.all()

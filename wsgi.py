@@ -38,6 +38,10 @@ migrate = get_migrate(app)
 Generic Commands
 '''
 
+@app.cli.command("rollback")
+def rollback():
+    db.session.rollback()
+
 # This command creates and initializes the database
 @app.cli.command("init", help="Creates and initializes the database")
 def initialize():
@@ -46,6 +50,8 @@ def initialize():
     bob = create_staff("bob", "bobpass")
     rob = create_customer("rob", "robpass")
     jane = create_customer("jane", "janepass")
+    jane = create_customer("ron", "ronepass")
+    jane = create_customer("sally", "sallypass")
     cache_api_games()
     list_game(1, 2, 20)
     list_game(1, 2, 50)

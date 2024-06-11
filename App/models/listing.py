@@ -28,6 +28,7 @@ class Listing(db.Model):
             'condition': self.condition,
             'price': self.price,
             'status': self.status,
+            'owner': self.owner.username,
             'created': self.created.strftime("%Y/%m/%d, %H:%M:%S"),
             'game': self.game.toJSON(),
         }

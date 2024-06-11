@@ -7,6 +7,7 @@ from App.controllers import (
     create_staff, 
     get_all_users,
     get_all_users_json,
+    get_all_customers_json,
     jwt_authenticate,
     is_staff,
     get_user
@@ -30,6 +31,16 @@ def client_app():
         users = get_all_users_json()
         return jsonify(users)
     return jsonify({"error": "User not authorized to perform this action"}), 403
+
+
+@user_views.route('/customers', methods=['GET'])
+@jwt_required()
+def customers():
+    if is_staff(get_jwt_identity()):
+        users = get_all_customers_json()
+        return jsonify(users)
+    return jsonify({"error": "User not authorized to perform this action"}), 403
+
 
 @user_views.route('/customer', methods=['POST'])
 def create_customer_action():

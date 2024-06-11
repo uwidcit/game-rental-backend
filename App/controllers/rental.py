@@ -17,7 +17,7 @@ def return_rental(rentalId):
     rental = Rental.query.get(rentalId)
     if rental:
         fees = rental.return_rental()
-        create_rental_payment(rentalId, rental.userId, fees)
+        create_rental_payment(rental)
         return fees
     return False
 

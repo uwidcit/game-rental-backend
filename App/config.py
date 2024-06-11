@@ -7,7 +7,7 @@ def load_config():
     config = {'ENV': os.environ.get('ENV', 'DEVELOPMENT')}
     delta = 7
     if config['ENV'] == "DEVELOPMENT":
-        from .default_config import JWT_EXPIRATION_DELTA, SQLALCHEMY_DATABASE_URI, SECRET_KEY, RAWG_TOKEN
+        from .custom_config import JWT_EXPIRATION_DELTA, SQLALCHEMY_DATABASE_URI, SECRET_KEY, RAWG_TOKEN
         delta = JWT_EXPIRATION_DELTA
         config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
         config['SECRET_KEY'] = SECRET_KEY
@@ -18,7 +18,8 @@ def load_config():
         config['RAWG_TOKEN'] = os.environ.get('RAWG_TOKEN')
         config['DEBUG'] = config['ENV'].upper() != 'PRODUCTION'
         delta = int(os.environ.get('JWT_EXPIRATION_DELTA', 7))
-    config['JWT_EXPIRATION_DELTA'] = timedelta(days=int(delta))
+    config['JWT_EXPIRATION_DELTA'] = timedelta(days=7)
+    config['JWT_HEADER_TYPE'] = 'JWT'
     return config
 
 config = load_config()

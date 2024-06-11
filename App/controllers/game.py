@@ -44,7 +44,6 @@ def search_api_game(query):
 def fetch_api_games(page=1, ordering='-release'):
     url = f'https://api.rawg.io/api/games?key={config["RAWG_TOKEN"]}&ordering={ordering}&page={page}'
     response = requests.request("GET", url)
-    print(url)
     json_response = json.loads(response.text)
     return json_response['results']
 

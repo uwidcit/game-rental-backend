@@ -3,7 +3,7 @@ from datetime import datetime
 
 class Listing(db.Model):
     listingId = db.Column(db.Integer, primary_key=True)
-    ownerId = db.Column(db.Integer, db.ForeignKey('customer.id'))
+    ownerId = db.Column(db.Integer, db.ForeignKey('user.id'))
     gameId = db.Column(db.Integer, db.ForeignKey('game.gameId'))
     condition = db.Column(db.String(30))
     price = db.Column(db.Float)

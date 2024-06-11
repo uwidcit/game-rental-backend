@@ -46,18 +46,14 @@ def initialize():
     bob = create_staff("bob", "bobpass")
     rob = create_customer("rob", "robpass")
     jane = create_customer("jane", "janepass")
-    # create a list of games
-    games = [
-        create_game("Frogger", "Everyone", "NSW", "https://image.com/pic.png", "Platform"),
-        create_game("Mario", "Everyone", "NSW", "https://image.com/pic.png", "Platform"),
-        create_game("Zelda", "Everyone", "NSW", "https://image.com/pic.png", "Adventure"),
-        create_game("Pokemon", "Everyone", "NSW", "https://image.com/pic.png", "RPG"),
-        create_game("Sonic", "Everyone", "NSW", "https://image.com/pic.png", "Platform"),
-        create_game("Fortnite", "Teen", "NSW", "https://image.com/pic.png", "Shooter"),
-        create_game("COD", "Teen", "NSW", "https://image.com/pic.png", "Shooter"),
-    ]
-    db.session.add_all(games)
-
+    cache_api_games()
+    list_game(1, 2, 20)
+    list_game(1, 2, 50)
+    list_game(1, 3, 110)
+    list_game(1, 3, 40)
+    create_rental(1, 3)
+    create_rental(2, 1)
+    return_rental(1)
     print('database intialized')
 
 '''

@@ -7,6 +7,9 @@ class Customer(User):
     listings = db.relationship('Listing', backref=db.backref('owner', lazy='joined'))
     rentals = db.relationship('Rental', backref=db.backref('renter', lazy='joined'))
     payments = db.relationship('Payment', backref=db.backref('customer', lazy='joined'))
+    __mapper_args__ = {
+      'polymorphic_identity': 'customer',
+    }
 
     def __init__(self, username, password):
         self.username = username

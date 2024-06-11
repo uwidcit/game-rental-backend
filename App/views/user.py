@@ -7,12 +7,21 @@ from App.controllers import (
     create_staff, 
     get_all_users,
     get_all_users_json,
+    jwt_authenticate,
     is_staff,
     get_user
 )
 
 user_views = Blueprint('user_views', __name__, template_folder='../templates')
 
+
+@user_views.route('/auth', methods=['POST'])
+def login():
+    data = request.json
+    result = jwt_authenticate(data['username'], data['password'])
+    if not result:
+        return jsonify(error="invalid credentials")
+    return jsonify(access_token=result)
 
 @user_views.route('/users', methods=['GET'])
 @jwt_required()

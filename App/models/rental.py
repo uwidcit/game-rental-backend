@@ -6,7 +6,7 @@ DEFAULT_RENTAL_PEROID = 14
 class Rental(db.Model):
     rentalId = db.Column(db.Integer, primary_key=True)
     listingId = db.Column(db.Integer, db.ForeignKey('listing.listingId'))
-    renterId = db.Column(db.Integer, db.ForeignKey('customer.id'))
+    renterId = db.Column(db.Integer, db.ForeignKey('user.id'))
     rental_date = db.Column(db.DateTime, default=datetime.utcnow)
     return_date = db.Column(db.DateTime, default=None)
     payments = db.relationship('RentalPayment', backref=db.backref('rental', lazy='joined'))
